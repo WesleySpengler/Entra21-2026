@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário</title>
+</head>
+<body>
+ 
+    <h1>Cadastro</h1>
+
+    <!-- FORM -->
+    <form id="formulario">
+        <input type="text" id="nome" placeholder="Digite um nome">
+        <button type="submit">Salvar</button>
+    </form>
+
+    <hr>
+
+    <!-- BUSCA -->
+    <h2>Buscar nome</h2>
+    <input type="text" id="busca" placeholder="Pesquisar...">
+
+    <!-- LISTA -->
+    <h2>Lista de nomes</h2>
+    <ul id="lista"></ul>
+
+    <hr>
+
+    <!-- EXCLUIR -->
+    <h2>Excluir nome</h2>
+    <input type="text" id="excluirNome" placeholder="Digite o nome exato">
+    <button onclick="excluirNome()">Excluir</button>
+
+    <script>
+        const form = document.getElementById("formulario");
+        const lista = document.getElementById("lista");
+        const busca = document.getElementById("busca");
+
+        // SALVAR
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const nome = document.getElementById("nome").value.trim();
+            if (!nome) return;
+
+            let nomes = JSON.parse(localStorage.getItem("nomes")) || [];
+
+            nomes.push(nome);
+            localStorage.setItem("nomes", JSON.stringify(nomes));
+
+            form.reset();
+            mostrarLista();
+        });
+
+        // MOSTRAR LISTA
+        function mostrarLista(filtro = "") {
+            lista.innerHTML = "";
+
+            let nomes = JSON.parse(localStorage.getItem("nomes")) || [];
+
+            nomes
+                .filter(nome => nome.toLowerCase().includes(filtro.toLowerCase()))
+                .forEach(nome => {
+                    let li = document.createElement("li");
+                    li.textContent = nome;
+                    lista.appendChild(li);
+                });
+        }
+
+        // BUSCAR
+        busca.addEventListener("input", function() {
+            mostrarLista(busca.value);
+        });
+
+        // EXCLUIR POR NOME
+        function excluirNome() {
+            const nomeExcluir = document.getElementById("excluirNome").value.trim();
+
+            let nomes = JSON.parse(localStorage.getItem("nomes")) || [];
+
+            nomes = nomes.filter(nome => nome !== nomeExcluir);
+
+            localStorage.setItem("nomes", JSON.stringify(nomes));
+
+            document.getElementById("excluirNome").value = "";
+            mostrarLista();
+        }
+
+        // INICIAR
+        mostrarLista();
+    </script>
+
+
+</body>
+</html>
