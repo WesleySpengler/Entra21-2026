@@ -520,136 +520,167 @@
   </div>
 
   <script>
-    const cinema = document.getElementById('cinema');
-    const selectedSeatsText = document.getElementById('selectedSeatsPanel');
-    const totalText = document.getElementById('totalPanel');
+window.onload = () => {
 
-    const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
-    const seatsPerRow = 18;
-    const ticketPrice = 32;
+  const cinema = document.getElementById('cinema');
+  const selectedSeatsText = document.getElementById('selectedSeatsPanel');
+  const totalText = document.getElementById('totalPanel');
 
-    const occupiedSeats = [
-      'A3', 'A4', 'A8', 'A9',
-      'B6', 'B7', 'B12',
-      'C2', 'C7', 'C15',
-      'D5', 'D6', 'D10',
-      'E1', 'E8', 'E14',
-      'F8', 'F9', 'F16',
-      'G4', 'G13',
-      'H2', 'H11', 'H17',
-      'I5', 'I6', 'I12',
-      'J8', 'J15',
-      'K3', 'K9',
-      'L1', 'L14'
-    ];
+  const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
+  const seatsPerRow = 18;
+  const ticketPrice = 32;
 
-    function createCinema() {
-      
+  const occupiedSeats = [
+    'A3', 'A4', 'A8', 'A9',
+    'B6', 'B7', 'B12',
+    'C2', 'C7', 'C15',
+    'D5', 'D6', 'D10',
+    'E1', 'E8', 'E14',
+    'F8', 'F9', 'F16',
+    'G4', 'G13',
+    'H2', 'H11', 'H17',
+    'I5', 'I6', 'I12',
+    'J8', 'J15',
+    'K3', 'K9',
+    'L1', 'L14'
+  ];
 
-      rows.forEach(rowLetter => {
-        const row = document.createElement('div');
-        row.classList.add('row');
+  function createCinema() {
 
-        const label = document.createElement('div');
-        label.classList.add('row-label');
-        label.textContent = rowLetter;
+    rows.forEach(rowLetter => {
 
-        const seatsContainer = document.createElement('div');
-        seatsContainer.classList.add('seats');
+      const row = document.createElement('div');
+      row.classList.add('row');
 
-        for (let i = 1; i <= seatsPerRow; i++) {
-          if (i === 7 || i === 13) {
-            const stairway = document.createElement('div');
-            stairway.classList.add('stairway');
+      const label = document.createElement('div');
+      label.classList.add('row-label');
+      label.textContent = rowLetter;
 
-            const stairs = document.createElement('div');
-            stairs.classList.add('stairs');
+      const seatsContainer = document.createElement('div');
+      seatsContainer.classList.add('seats');
 
-            for (let s = 0; s < 5; s++) {
-              const step = document.createElement('div');
-              step.classList.add('step');
-              stairs.appendChild(step);
-            }
+      for (let i = 1; i <= seatsPerRow; i++) {
 
-            const stairText = document.createElement('div');
-            stairText.classList.add('stair-text');
-            stairText.textContent = 'ESCADA';
+        if (i === 7 || i === 13) {
 
-            stairway.appendChild(stairs);
-            stairway.appendChild(stairText);
+          const stairway = document.createElement('div');
+          stairway.classList.add('stairway');
 
-            seatsContainer.appendChild(stairway);
+          const stairs = document.createElement('div');
+          stairs.classList.add('stairs');
+
+          for (let s = 0; s < 5; s++) {
+
+            const step = document.createElement('div');
+            step.classList.add('step');
+            stairs.appendChild(step);
+
           }
 
-          const seat = document.createElement('div');
-          const seatNumber = document.createElement('span');
-          const seatId = `${rowLetter}${i}`;
+          const stairText = document.createElement('div');
+          stairText.classList.add('stair-text');
+          stairText.textContent = 'ESCADA';
 
-          seat.classList.add('seat');
-          seat.dataset.seat = seatId;
-          seatNumber.classList.add('seat-number');
-          seatNumber.textContent = i;
-          seat.appendChild(seatNumber);
+          stairway.appendChild(stairs);
+          stairway.appendChild(stairText);
 
-          if (occupiedSeats.includes(seatId)) {
-            seat.classList.add('occupied');
-          }
-
-          if ((rowLetter === 'K' || rowLetter === 'L') && (i === 1 || i === 2 || i === 17 || i === 18)) {
-            seat.classList.add('wheelchair');
-            seat.innerHTML = '♿';
-          }
-
-          seat.addEventListener('click', () => toggleSeat(seat));
-
-          seatsContainer.appendChild(seat);
+          seatsContainer.appendChild(stairway);
         }
 
-        row.appendChild(label);
-        row.appendChild(seatsContainer);
-        cinema.appendChild(row);
-      });
-    }
+        const seat = document.createElement('div');
+        const seatNumber = document.createElement('span');
+        const seatId = `${rowLetter}${i}`;
 
-    function toggleSeat(seat) {
-      if (seat.classList.contains('occupied')) return;
+        seat.classList.add('seat');
+        seat.dataset.seat = seatId;
 
-      seat.classList.toggle('selected');
-      updateSelection();
-    }
+        seatNumber.classList.add('seat-number');
+        seatNumber.textContent = i;
 
-    function updateSelection() {
-      // Cada ingresso custa R$ 32,00
-      const selectedSeats = document.querySelectorAll('.seat.selected');
+        seat.appendChild(seatNumber);
 
-      const seats = [...selectedSeats].map(seat => seat.dataset.seat);
+        if (occupiedSeats.includes(seatId)) {
+          seat.classList.add('occupied');
+        }
 
-      if (seats.length === 0) {
-        selectedSeatsText.textContent = 'Nenhum assento selecionado';
-      } else {
-        selectedSeatsText.innerHTML = `Assentos selecionados: <strong>${seats.join(', ')}</strong>`;
+        if (
+          (rowLetter === 'K' || rowLetter === 'L') &&
+          (i === 1 || i === 2 || i === 17 || i === 18)
+        ) {
+          seat.classList.add('wheelchair');
+          seat.innerHTML = '♿';
+        }
+
+        seat.addEventListener('click', () => toggleSeat(seat));
+
+        seatsContainer.appendChild(seat);
       }
 
-      const total = seats.length * ticketPrice;
+      row.appendChild(label);
+      row.appendChild(seatsContainer);
 
-      totalText.textContent = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
+      cinema.appendChild(row);
+    });
+  }
+
+  function toggleSeat(seat) {
+
+    if (seat.classList.contains('occupied')) return;
+
+    seat.classList.toggle('selected');
+
+    updateSelection();
+  }
+
+  function updateSelection() {
+
+    const selectedSeats = document.querySelectorAll('.seat.selected');
+
+    const seats = [...selectedSeats].map(
+      seat => seat.dataset.seat
+    );
+
+    if (seats.length === 0) {
+
+      selectedSeatsText.textContent =
+        'Nenhum assento selecionado';
+
+    } else {
+
+      selectedSeatsText.innerHTML =
+        `Assentos selecionados: <strong>${seats.join(', ')}</strong>`;
     }
 
-    function confirmSelection() {
-      const selectedSeats = document.querySelectorAll('.seat.selected');
+    const total = seats.length * ticketPrice;
 
-      if (selectedSeats.length === 0) {
-        alert('Selecione ao menos um assento!');
-        return;
-      }
+    totalText.textContent =
+      `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
+  }
 
-      const seats = [...selectedSeats].map(seat => seat.dataset.seat);
+  window.confirmSelection = function () {
 
-      alert(`Compra realizada com sucesso!\n\nAssentos: ${seats.join(', ')}`);
+    const selectedSeats =
+      document.querySelectorAll('.seat.selected');
+
+    if (selectedSeats.length === 0) {
+
+      alert('Selecione ao menos um assento!');
+      return;
     }
 
-    createCinema();
-  </script>
+    const seats = [...selectedSeats].map(
+      seat => seat.dataset.seat
+    );
+
+    alert(
+      `Compra realizada com sucesso!\n\nAssentos: ${seats.join(', ')}`
+    );
+  }
+
+  createCinema();
+
+}
+</script>
 
   <div class="movie-panel">
     <img class="movie-poster" src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1200&auto=format&fit=crop" alt="Poster do Filme">
