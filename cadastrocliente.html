@@ -1,90 +1,173 @@
+<!-- Define o tipo do documento como HTML5 -->
 <!DOCTYPE html>
+
+<!-- Início do HTML em português -->
 <html lang="pt-BR">
+
 <head>
+
+  <!-- Permite caracteres especiais -->
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Ajusta a página para celular -->
+  <meta name="viewport"
+  content="width=device-width, initial-scale=1.0">
+
+  <!-- Título da aba -->
   <title>Cadastro de Clientes</title>
 
   <style>
 
+    /* Estilo do corpo da página */
     body{
+
+      /* Fonte da página */
       font-family: Arial, Helvetica, sans-serif;
+
+      /* Cor de fundo */
       background:#f2f2f2;
     }
 
+    /* Container principal */
     .container{
+
+      /* Largura */
       width:700px;
+
+      /* Centraliza na tela */
       margin:30px auto;
     }
 
+    /* Card branco */
     .card{
+
       background:white;
+
+      /* Espaçamento interno */
       padding:20px;
+
+      /* Bordas arredondadas */
       border-radius:8px;
+
+      /* Sombra */
       box-shadow:0 0 10px rgba(0,0,0,0.1);
     }
 
+    /* Labels dos campos */
     label{
+
+      /* Faz ficar em linha separada */
       display:block;
+
       margin-top:10px;
+
+      /* Texto em negrito */
       font-weight:bold;
     }
 
+    /* Campos input */
     input{
+
+      /* Ocupa toda largura */
       width:100%;
+
       padding:10px;
+
       margin-top:5px;
+
+      /* Borda */
       border:1px solid #ccc;
+
       border-radius:4px;
+
+      /* Evita aumentar tamanho */
       box-sizing:border-box;
     }
 
+    /* Botões */
     button{
+
       margin-top:15px;
+
       padding:10px 20px;
+
+      /* Cor azul */
       background:#007bff;
+
       color:white;
+
       border:none;
+
       border-radius:4px;
+
       cursor:pointer;
     }
 
+    /* Efeito ao passar mouse */
     button:hover{
+
       background:#0056b3;
     }
 
+    /* Parágrafo de mensagem */
     #mensagem{
+
       margin-top:15px;
+
       font-weight:bold;
     }
 
   </style>
+
 </head>
+
 <body>
 
+  <!-- Área principal -->
   <div class="container">
 
+    <!-- Card -->
     <div class="card">
 
+      <!-- Título -->
       <h1>Cadastro de Clientes</h1>
 
+      <!-- Campo nome -->
       <label>Nome</label>
-      <input type="text" id="nome">
 
+      <input
+      type="text"
+      id="nome">
+
+      <!-- Campo email -->
       <label>E-mail</label>
-      <input type="email" id="email">
 
+      <input
+      type="email"
+      id="email">
+
+      <!-- Campo telefone -->
       <label>Telefone</label>
-      <input type="text" id="telefone">
 
+      <input
+      type="text"
+      id="telefone">
+
+      <!-- Botão cadastrar -->
       <button onclick="cadastrarCliente()">
+
         Cadastrar
+
       </button>
 
+      <!-- Botão abrir lista -->
       <button onclick="abrirLista()">
+
         Ver Lista
+
       </button>
 
+      <!-- Parágrafo de mensagens -->
       <p id="mensagem"></p>
 
     </div>
@@ -93,53 +176,95 @@
 
   <script>
 
+    /* Função cadastrar cliente */
     function cadastrarCliente(){
 
-      const nome = document.getElementById('nome').value
-      const email = document.getElementById('email').value
-      const telefone = document.getElementById('telefone').value
+      /* Pega valor do input nome */
+      const nome =
+      document.getElementById('nome').value
 
-      const mensagem = document.getElementById('mensagem')
+      /* Pega valor do input email */
+      const email =
+      document.getElementById('email').value
 
-      if(nome === '' || email === '' || telefone === ''){
+      /* Pega valor do input telefone */
+      const telefone =
+      document.getElementById('telefone').value
 
+      /* Seleciona parágrafo de mensagem */
+      const mensagem =
+      document.getElementById('mensagem')
+
+      /* Verifica se algum campo está vazio */
+      if(
+        nome === '' ||
+        email === '' ||
+        telefone === ''
+      ){
+
+        /* Cor vermelha */
         mensagem.style.color = 'red'
 
+        /* Texto da mensagem */
         mensagem.innerText =
         'Preencha todos os campos!'
 
+        /* Para execução */
         return
       }
 
+      /* Cria objeto cliente */
       const cliente = {
+
         nome,
         email,
         telefone
       }
 
+      /* Busca clientes no localStorage */
       let clientes =
-      JSON.parse(localStorage.getItem('clientes')) || []
 
+      JSON.parse(
+      localStorage.getItem('clientes'))
+
+      || []
+
+      /* Adiciona cliente */
       clientes.push(cliente)
 
+      /* Salva novamente */
       localStorage.setItem(
+
         'clientes',
+
         JSON.stringify(clientes)
+
       )
 
+      /* Cor verde */
       mensagem.style.color = 'green'
 
+      /* Mensagem sucesso */
       mensagem.innerText =
+
       'Cliente cadastrado com sucesso!'
 
+      /* Limpa input nome */
       document.getElementById('nome').value = ''
+
+      /* Limpa input email */
       document.getElementById('email').value = ''
+
+      /* Limpa input telefone */
       document.getElementById('telefone').value = ''
 
     }
 
+    /* Abre página lista.html */
     function abrirLista(){
+
       window.location.href = 'lista.html'
+
     }
 
   </script>
