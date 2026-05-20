@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Clientes</title>
+
+  <style>
+
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      background:#f2f2f2;
+      margin:0;
+      padding:0;
+    }
+
+    .container{
+      width:700px;
+      margin:30px auto;
+    }
+
+    h1{
+      color:#333;
+    }
+
+    .card-cliente{
+      background:white;
+      padding:20px;
+      border-radius:10px;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
+      margin-bottom:20px;
+    }
+
+    .nome{
+      font-size:24px;
+      font-weight:bold;
+      color:#007bff;
+      margin-bottom:10px;
+    }
+
+    .info{
+      font-size:16px;
+      color:#444;
+      margin-bottom:5px;
+    }
+
+    button{
+      margin-top:15px;
+      padding:10px 20px;
+      border:none;
+      border-radius:5px;
+      cursor:pointer;
+      color:white;
+    }
+
+    .btn-excluir{
+      background:red;
+    }
+
+    .btn-excluir:hover{
+      background:darkred;
+    }
+
+    .btn-voltar{
+      background:#007bff;
+    }
+
+    .btn-voltar:hover{
+      background:#0056b3;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <h1>Clientes Cadastrados</h1>
+
+    <div id="listaClientes"></div>
+
+    <button
+      class="btn-voltar"
+      onclick="voltar()">
+      Voltar
+    </button>
+
+  </div>
+
+  <script>
+
+    let clientes =
+    JSON.parse(localStorage.getItem('clientes')) || []
+
+    const lista =
+    document.getElementById('listaClientes')
+
+    function carregarClientes(){
+
+      lista.innerHTML = ''
+
+      clientes.forEach((cliente, index) => {
+
+        const card =
+        document.createElement('div')
+
+        card.classList.add('card-cliente')
+
+        card.innerHTML = `
+        
+          <div class="nome">
+            ${cliente.nome}
+          </div>
+
+          <div class="info">
+            <strong>E-mail:</strong>
+            ${cliente.email}
+          </div>
+
+          <div class="info">
+            <strong>Telefone:</strong>
+            ${cliente.telefone}
+          </div>
+
+          <button
+            class="btn-excluir"
+            onclick="excluirCliente(${index})">
+            Excluir
+          </button>
+
+        `
+
+        lista.appendChild(card)
+
+      })
+
+    }
+
+    function excluirCliente(index){
+
+      clientes.splice(index, 1)
+
+      localStorage.setItem(
+        'clientes',
+        JSON.stringify(clientes)
+      )
+
+      carregarClientes()
+
+    }
+
+    function voltar(){
+      window.location.href = 'cadastro.html'
+    }
+
+    carregarClientes()
+
+  </script>
+
+</body>
+</html>
