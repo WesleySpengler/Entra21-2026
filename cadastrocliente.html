@@ -1,23 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro de Clientes</title>
 
   <style>
+
     body{
       font-family: Arial, Helvetica, sans-serif;
       background:#f2f2f2;
     }
 
     .container{
-      width: 700px;
-      margin: 30px auto;
-    }
-
-    h1,h2{
-      color:#333;
+      width:700px;
+      margin:30px auto;
     }
 
     .card{
@@ -25,7 +22,6 @@
       padding:20px;
       border-radius:8px;
       box-shadow:0 0 10px rgba(0,0,0,0.1);
-      margin-bottom:20px;
     }
 
     label{
@@ -57,32 +53,20 @@
       background:#0056b3;
     }
 
-    table{
-      width:100%;
-      border-collapse:collapse;
-      background:white;
+    #mensagem{
+      margin-top:15px;
+      font-weight:bold;
     }
 
-    th{
-      background:#007bff;
-      color:white;
-      padding:10px;
-      text-align:left;
-    }
-
-    td{
-      padding:10px;
-      border:1px solid #ddd;
-    }
   </style>
 </head>
 <body>
 
   <div class="container">
 
-    <h1>Cadastro de Clientes</h1>
-
     <div class="card">
+
+      <h1>Cadastro de Clientes</h1>
 
       <label>Nome</label>
       <input type="text" id="nome">
@@ -97,25 +81,13 @@
         Cadastrar
       </button>
 
+      <button onclick="abrirLista()">
+        Ver Lista
+      </button>
+
+      <p id="mensagem"></p>
+
     </div>
-
-    <h2>Lista de Clientes</h2>
-
-    <table>
-
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>E-mail</th>
-          <th>Telefone</th>
-        </tr>
-      </thead>
-
-      <tbody id="listaClientes">
-
-      </tbody>
-
-    </table>
 
   </div>
 
@@ -127,28 +99,47 @@
       const email = document.getElementById('email').value
       const telefone = document.getElementById('telefone').value
 
+      const mensagem = document.getElementById('mensagem')
+
       if(nome === '' || email === '' || telefone === ''){
-        alert('Preencha todos os campos!')
+
+        mensagem.style.color = 'red'
+
+        mensagem.innerText =
+        'Preencha todos os campos!'
+
         return
       }
 
-      const tabela = document.getElementById('listaClientes')
+      const cliente = {
+        nome,
+        email,
+        telefone
+      }
 
-      const linha = document.createElement('tr')
+      let clientes =
+      JSON.parse(localStorage.getItem('clientes')) || []
 
-      linha.innerHTML = `
-        <td>${nome}</td>
-        <td>${email}</td>
-        <td>${telefone}</td>
-      `
+      clientes.push(cliente)
 
-      tabela.appendChild(linha)
+      localStorage.setItem(
+        'clientes',
+        JSON.stringify(clientes)
+      )
 
-      // limpar campos
+      mensagem.style.color = 'green'
+
+      mensagem.innerText =
+      'Cliente cadastrado com sucesso!'
+
       document.getElementById('nome').value = ''
       document.getElementById('email').value = ''
       document.getElementById('telefone').value = ''
 
+    }
+
+    function abrirLista(){
+      window.location.href = 'lista.html'
     }
 
   </script>
