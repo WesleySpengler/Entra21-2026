@@ -1,23 +1,18 @@
-<!-- Define que o documento usa HTML5 -->
 <!DOCTYPE html>
 
-<!-- Início da página HTML em português -->
 <html lang="pt-BR">
 
 <head>
 
-  <!-- Permite acentos e caracteres especiais -->
   <meta charset="UTF-8">
 
-  <!-- Faz o site funcionar bem no celular -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport"
+  content="width=device-width, initial-scale=1.0">
 
-  <!-- Título da aba do navegador -->
   <title>Lista de Clientes</title>
 
   <style>
 
-    /* Estilo geral da página */
     body{
       font-family: Arial, Helvetica, sans-serif;
       background:#f2f2f2;
@@ -25,31 +20,25 @@
       padding:0;
     }
 
-    /* Área principal centralizada */
     .container{
       width:900px;
       margin:30px auto;
     }
 
-    /* Título principal */
     h1{
       color:#333;
       margin-bottom:20px;
     }
 
-    /* Organiza os cards em grade */
     .lista{
       display:grid;
 
-      /* Cria colunas automáticas */
       grid-template-columns:
       repeat(auto-fill, minmax(250px, 1fr));
 
-      /* Espaço entre os cards */
       gap:20px;
     }
 
-    /* Card de cada cliente */
     .card-cliente{
       background:white;
       border-radius:12px;
@@ -57,7 +46,6 @@
       box-shadow:0 0 10px rgba(0,0,0,0.1);
     }
 
-    /* Nome do cliente */
     .nome{
       font-size:24px;
       font-weight:bold;
@@ -65,21 +53,19 @@
       margin-bottom:15px;
     }
 
-    /* Informações do cliente */
     .info{
       font-size:15px;
       color:#444;
       margin-bottom:8px;
     }
 
-    /* Área dos botões */
     .botoes{
       margin-top:15px;
       display:flex;
       gap:10px;
+      flex-wrap:wrap;
     }
 
-    /* Estilo padrão dos botões */
     button{
       padding:10px 15px;
       border:none;
@@ -89,29 +75,28 @@
       font-weight:bold;
     }
 
-    /* Botão editar */
     .btn-editar{
       background:#28a745;
     }
 
-    /* Botão excluir */
     .btn-excluir{
       background:red;
     }
 
-    /* Botão voltar */
+    .btn-detalhes{
+      background:#6f42c1;
+    }
+
     .btn-voltar{
       background:#007bff;
       margin-top:30px;
     }
 
-    /* Formulário de edição escondido */
     .form-edicao{
       margin-top:15px;
       display:none;
     }
 
-    /* Inputs do formulário */
     .form-edicao input{
       width:100%;
       padding:10px;
@@ -121,7 +106,6 @@
       box-sizing:border-box;
     }
 
-    /* Botão salvar */
     .btn-salvar{
       background:#ff9800;
       margin-top:10px;
@@ -133,16 +117,12 @@
 
 <body>
 
-  <!-- Área principal -->
   <div class="container">
 
-    <!-- Título -->
     <h1>Clientes Cadastrados</h1>
 
-    <!-- Div onde os cards serão criados -->
     <div class="lista" id="listaClientes"></div>
 
-    <!-- Botão para voltar -->
     <button
       class="btn-voltar"
       onclick="voltar()">
@@ -155,31 +135,23 @@
 
   <script>
 
-    /* Pega os clientes salvos no localStorage */
     let clientes =
     JSON.parse(localStorage.getItem('clientes')) || []
 
-    /* Seleciona a div da lista */
     const lista =
     document.getElementById('listaClientes')
 
-    /* Função que cria os cards */
     function carregarClientes(){
 
-      /* Limpa a tela antes de atualizar */
       lista.innerHTML = ''
 
-      /* Percorre todos os clientes */
       clientes.forEach((cliente, index) => {
 
-        /* Cria uma div */
         const card =
         document.createElement('div')
 
-        /* Adiciona classe no card */
         card.classList.add('card-cliente')
 
-        /* Conteúdo HTML do card */
         card.innerHTML = `
         
           <div class="nome">
@@ -196,9 +168,13 @@
             ${cliente.telefone}
           </div>
 
+          <div class="info">
+            <strong>CEP:</strong>
+            ${cliente.cep}
+          </div>
+
           <div class="botoes">
 
-            <!-- Botão editar -->
             <button
               class="btn-editar"
               onclick="mostrarEdicao(${index})">
@@ -207,7 +183,6 @@
 
             </button>
 
-            <!-- Botão excluir -->
             <button
               class="btn-excluir"
               onclick="excluirCliente(${index})">
@@ -216,32 +191,40 @@
 
             </button>
 
+            <button
+              class="btn-detalhes"
+              onclick="verDetalhes('${cliente.cep}')">
+
+              Detalhes
+
+            </button>
+
           </div>
 
-          <!-- Formulário de edição -->
           <div
             class="form-edicao"
             id="form${index}">
 
-            <!-- Campo nome -->
             <input
               type="text"
               id="nome${index}"
               value="${cliente.nome}">
 
-            <!-- Campo email -->
             <input
               type="email"
               id="email${index}"
               value="${cliente.email}">
 
-            <!-- Campo telefone -->
             <input
               type="text"
               id="telefone${index}"
               value="${cliente.telefone}">
 
-            <!-- Botão salvar -->
+            <input
+              type="text"
+              id="cep${index}"
+              value="${cliente.cep}">
+
             <button
               class="btn-salvar"
               onclick="salvarEdicao(${index})">
@@ -254,75 +237,70 @@
 
         `
 
-        /* Coloca o card na tela */
         lista.appendChild(card)
 
       })
 
     }
 
-    /* Função excluir cliente */
     function excluirCliente(index){
 
-      /* Remove cliente do array */
       clientes.splice(index, 1)
 
-      /* Atualiza localStorage */
       localStorage.setItem(
         'clientes',
         JSON.stringify(clientes)
       )
 
-      /* Atualiza a tela */
       carregarClientes()
 
     }
 
-    /* Mostra formulário de edição */
     function mostrarEdicao(index){
 
       const formulario =
       document.getElementById(`form${index}`)
 
-      /* Mostra formulário */
       formulario.style.display = 'block'
 
     }
 
-    /* Salva edição */
     function salvarEdicao(index){
 
-      /* Atualiza nome */
       clientes[index].nome =
       document.getElementById(`nome${index}`).value
 
-      /* Atualiza email */
       clientes[index].email =
       document.getElementById(`email${index}`).value
 
-      /* Atualiza telefone */
       clientes[index].telefone =
       document.getElementById(`telefone${index}`).value
 
-      /* Salva novamente */
+      clientes[index].cep =
+      document.getElementById(`cep${index}`).value
+
       localStorage.setItem(
         'clientes',
         JSON.stringify(clientes)
       )
 
-      /* Atualiza a tela */
       carregarClientes()
 
     }
 
-    /* Volta para Cadastro */
+    function verDetalhes(cep){
+
+      window.location.href =
+      `consumir-api.html?cep=${cep}`
+
+    }
+
     function voltar(){
 
       window.location.href = 'cadastro.html'
 
     }
 
-    /* Executa a função ao abrir página */
     carregarClientes()
 
   </script>
